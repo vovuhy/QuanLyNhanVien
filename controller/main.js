@@ -19,6 +19,7 @@ function getLocalStorage() {
         renderTable(dsnv.arr);
     }
 }
+getLocalStorage()
 
 function getEle(id) {
     return document.getElementById(id);
@@ -36,11 +37,15 @@ function renderTable(data) {
               <td>${nv.email}</td>
               <td>${nv.ngayLam}</td>
               <td>${nv.chucVu}</td>
-              <td>${nv.tongLuong}</td>
+              <td>${nv.tongLuong.toLocaleString('vi-VN', {
+                style: 'decimal',
+                maximumFractionDigits: 2,
+                minimumFractionDigits: 0
+            })}</td>
               <td>${nv.loaiNhanVien}</td>
               <td>
-                  <button class="btn btn-info" onclick="editSV('${nv.taiKhoan}')">Edit</button>
-                  <button class="btn btn-danger" onclick="deleteSV('${nv.taiKhoan}')">Delete</button>
+                  <button class="btn btn-info" onclick="editSV('${nv.taiKhoan}')">Sửa</button>
+                  <button class="btn btn-danger" onclick="deleteSV('${nv.taiKhoan}')">Xóa</button>
               </td>
           </tr>
       `;
