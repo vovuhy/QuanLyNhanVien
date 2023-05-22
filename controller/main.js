@@ -66,15 +66,21 @@ function layThongTinNV(isAdd) {
             validation.kiemTraDoDaiKiTu(
                 _taiKhoan,
                 "tbTKNV",
-                "(*) Vui long nhap 4 - 10 ki tu",
+                "(*) Vui lòng nhập từ 4-6 ký tự",
                 4,
-                10
+                6
             ) &&
-            validation.kiemTraMaSVTonTai(
+            validation.kiemTraTKNVTonTai(
                 _taiKhoan,
                 "tbTKNV",
                 "(*) Tài khoản đã tồn tại!",
                 dsnv.arr
+            ) &&
+            validation.kiemTraPattern(
+                _tenNV,
+                "^[A-Za-z]+$",
+                "tbTen",
+                "(*) Vui lòng nhập tài khoản hợp lệ!"
             );
     }
 
@@ -84,6 +90,103 @@ function layThongTinNV(isAdd) {
             _tenNV,
             "^[a-zA-Z_ÀÁÂÃÈÉÊẾÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶ" + "ẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểếỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợ" + "ụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ\\s]+$",
             "tbTen",
-            "(*) Vui long nhap Ten hop le!"
+            "(*) Vui lòng nhập tên hợp lệ!"
         );
+
+    isValid &=
+        validation.kiemTraRong(_email, "tbEmail", "(*) Vui lòng nhập") &&
+        validation.kiemTraPattern(
+            _email,
+            /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/,
+            "tbEmail",
+            "(*) Vui lòng nhập Email hợp lệ!"
+        );
+
+    isValid &=
+        validation.kiemTraRong(_matKhau, "tbMatKhau", "(*) Vui lòng nhập") &&
+        validation.kiemTraPattern(
+            _matKhau,
+            /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{6,10}$/,
+            "tbMatKhau",
+            "(*) Vui lòng nhập mật khẩu hợp lệ (có 6-10 ký tự ,1 ký tự số, 1 ký tự in hoa, 1 ký tự đặc biệt)!"
+        );
+
+    isValid &=
+        validation.kiemTraRong(_ngayLam, "tbNgay", "(*) Vui lòng nhập") &&
+        validation.kiemTraPattern(
+            _ngayLam,
+            /^(0[1-9]|1[0-2])\/(0[1-9]|1\d|2\d|3[01])\/(19|20)\d{2}$/,
+            "tbNgay",
+            "(*) Vui lòng nhập ngày đúng định dạng MM/DD/YYYY!"
+        );
+    isValid &=
+        validation.kiemTraRong(_luongCoBan, "tbLuongCB", "(*) Vui lòng nhập") &&
+        validation.kiemTraPattern(
+            _luongCoBan,
+            /^[0-9]+$/,
+            "tbLuongCB",
+            "(*) Vui lòng nhập ngày đúng định dạng số!"
+        ) &&
+        validation.kiemTraInputTrongKhoang(
+            _luongCoBan,
+            "tbLuongCB",
+            'Nhận vào giá trị nằm trong khoảng từ 1 000 000 đến 20 000 000',
+            1000000,
+            20000000
+        )
+
+    isValid &=
+        validation.kiemTraChucVu(
+            _chucVu,
+            'tbChucVu',
+            'Vui lòng chọn chức vụ'
+        )
+    isValid &=
+        validation.kiemTraRong(_gioLamTrongThang, "tbGiolam", "(*) Vui lòng nhập") &&
+        validation.kiemTraPattern(
+            _luongCoBan,
+            /^[0-9]+$/,
+            "tbLuongCB",
+            "(*) Vui lòng nhập ngày đúng định dạng số!"
+        ) &&
+        validation.kiemTraInputTrongKhoang(
+            _gioLamTrongThang,
+            "tbGiolam",
+            'Nhận vào giá trị nằm trong khoảng từ 80 đến 200',
+            80,
+            200
+        )
+
+    if (isValid == false) {
+        return false
+    }
+
+    var nv = new NhanVien(
+        _taiKhoan,
+        _tenNV,
+        _email,
+        _matKhau,
+        _ngayLam,
+        _luongCoBan * 1,
+        _chucVu,
+        _gioLamTrongThang * 1
+    )
+
+    nv.tinhTongLuong();
+    nv.tinhXepLoai()
+    return nv
 }
+
+
+getEle('btnThemNV').addEventListener("click", function (event) {
+    event.preventDefault();
+
+    var nv = layThongTinNV(true);
+    console.log(nv)
+    if(nv){
+        dsnv.addNV(nv);
+    renderTable(dsnv.arr);
+    setLocalStorage();
+    }
+    
+});

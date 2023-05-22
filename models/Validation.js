@@ -73,8 +73,8 @@ function Validation() {
     return false;
   };
 
-  this.kiemTraKhoaHoc = function (idSelect, errorId, mess) {
-    if (getEle(idSelect).selectedIndex !== 0) {
+  this.kiemTraInputTrongKhoang= function (value, errorId, mess, min, max) {
+    if (value*1 >= min && value*1 <= max) {
       //true
       getEle(errorId).style.display = "none";
       getEle(errorId).innerHTML = "";
