@@ -37,7 +37,7 @@ function renderTable(data) {
               <td>${nv.ngayLam}</td>
               <td>${nv.chucVu}</td>
               <td>${nv.tongLuong}</td>
-              td>${nv.loaiNhanVien}</td>
+              <td>${nv.loaiNhanVien}</td>
               <td>
                   <button class="btn btn-info" onclick="editSV('${nv.taiKhoan}')">Edit</button>
                   <button class="btn btn-danger" onclick="deleteSV('${nv.taiKhoan}')">Delete</button>
@@ -45,7 +45,7 @@ function renderTable(data) {
           </tr>
       `;
     }
-    getEle("tbodySinhVien").innerHTML = content;
+    getEle("tableDanhSach").innerHTML = content;
 }
 
 function layThongTinNV(isAdd) {
@@ -77,7 +77,7 @@ function layThongTinNV(isAdd) {
                 dsnv.arr
             ) &&
             validation.kiemTraPattern(
-                _tenNV,
+                _taiKhoan,
                 "^[A-Za-z]+$",
                 "tbTen",
                 "(*) Vui lòng nhập tài khoản hợp lệ!"
@@ -93,6 +93,7 @@ function layThongTinNV(isAdd) {
             "(*) Vui lòng nhập tên hợp lệ!"
         );
 
+    
     isValid &=
         validation.kiemTraRong(_email, "tbEmail", "(*) Vui lòng nhập") &&
         validation.kiemTraPattern(
@@ -119,6 +120,7 @@ function layThongTinNV(isAdd) {
             "tbNgay",
             "(*) Vui lòng nhập ngày đúng định dạng MM/DD/YYYY!"
         );
+
     isValid &=
         validation.kiemTraRong(_luongCoBan, "tbLuongCB", "(*) Vui lòng nhập") &&
         validation.kiemTraPattern(
